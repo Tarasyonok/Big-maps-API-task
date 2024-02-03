@@ -74,15 +74,6 @@ class MapsAPI(QWidget):
         if event.key() == Qt.Key.Key_F3:
             self.l = 'skl'
 
-        # if self.approach[self.idx] < 0:
-        #     self.spn[0] /= abs(self.approach[self.idx])
-        #     self.spn[1] /= abs(self.approach[self.idx])
-        # else:
-        #     self.spn[0] *= abs(self.approach[self.idx])
-        #     self.spn[1] *= abs(self.approach[self.idx])
-        # self.spn[0] *= 2 ** self.approach[self.idx]
-        # self.spn[1] *= 2 ** self.approach[self.idx]
-
         self.spn[0] = round(self.spn[0], 6)
         self.spn[1] = round(self.spn[1], 6)
 
