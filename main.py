@@ -13,6 +13,8 @@ class MapsAPI(QWidget):
     def __init__(self):
         self.ln = 37.530887
         self.lt = 55.703118
+        self.ln_start = 37.530887
+        self.lt_start = 55.703118
         self.spn = [0.002, 0.002]
         self.idx = 0
 
@@ -58,13 +60,13 @@ class MapsAPI(QWidget):
                 self.spn[0] /= 2
                 self.spn[1] /= 2
         if event.key() == Qt.Key.Key_Up:
-            self.lt += 0.001
+            self.lt += 0.001 * (self.lt / self.lt_start)
         if event.key() == Qt.Key.Key_Down:
-            self.lt -= 0.001
+            self.lt -= 0.001 * (self.lt / self.lt_start)
         if event.key() == Qt.Key.Key_Left:
-            self.ln -= 0.001
+            self.ln -= 0.001 * (self.ln / self.ln_start)
         if event.key() == Qt.Key.Key_Right:
-            self.ln += 0.001
+            self.ln += 0.001 * (self.ln / self.ln_start)
 
         # if self.approach[self.idx] < 0:
         #     self.spn[0] /= abs(self.approach[self.idx])
