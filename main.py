@@ -16,6 +16,7 @@ class MapsAPI(QMainWindow):
         super().__init__()
         uic.loadUi('UI.ui', self)
 
+
         self.ln = 37.530887
         self.lt = 55.703118
         self.spn = [0.002, 0.002]
