@@ -13,8 +13,6 @@ class MapsAPI(QWidget):
     def __init__(self):
         self.ln = 37.530887
         self.lt = 55.703118
-        self.ln_start = 37.530887
-        self.lt_start = 55.703118
         self.spn = [0.002, 0.002]
         self.idx = 0
 
@@ -47,6 +45,13 @@ class MapsAPI(QWidget):
         self.image.setPixmap(self.pixmap)
 
     def keyPressEvent(self, event):
+        if self.idx == 0:
+            step = 0.001
+        elif self.idx > 0:
+            step = 0.001 * 2 ** self.idx
+        elif self.idx < 0:
+            step = 0.001 / 2 ** abs(self.idx)
+
         if event.key() == Qt.Key.Key_PageUp:
             if self.idx <= 5:
                 self.idx += 1
@@ -60,13 +65,13 @@ class MapsAPI(QWidget):
                 self.spn[0] /= 2
                 self.spn[1] /= 2
         if event.key() == Qt.Key.Key_Up:
-            self.lt += 0.001 * (self.lt / self.lt_start)
+            self.lt += step
         if event.key() == Qt.Key.Key_Down:
-            self.lt -= 0.001 * (self.lt / self.lt_start)
+            self.lt -= step
         if event.key() == Qt.Key.Key_Left:
-            self.ln -= 0.001 * (self.ln / self.ln_start)
+            self.ln -= step
         if event.key() == Qt.Key.Key_Right:
-            self.ln += 0.001 * (self.ln / self.ln_start)
+            self.ln += step
 
         # if self.approach[self.idx] < 0:
         #     self.spn[0] /= abs(self.approach[self.idx])
