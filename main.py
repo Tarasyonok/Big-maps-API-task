@@ -11,13 +11,14 @@ SCREEN_SIZE = [600, 450]
 
 class MapsAPI(QWidget):
     def __init__(self):
-        super().__init__()
-        self.getImage()
-        self.initUI()
-
         self.ln = 37.530887
         self.lt = 55.703118
         self.spn = [0.002, 0.002]
+        self.idx = 0
+
+        super().__init__()
+        self.getImage()
+        self.initUI()
 
     def getImage(self):
         map_request = f"http://static-maps.yandex.ru/1.x/?ll={str(self.ln)},{str(self.lt)}&spn={str(self.spn[0])},{str(self.spn[1])}&l=map"
@@ -44,10 +45,49 @@ class MapsAPI(QWidget):
         self.image.setPixmap(self.pixmap)
 
     def keyPressEvent(self, event):
+        if self.idx == 0:
+            step = 0.001
+        elif self.idx > 0:
+            step = 0.001 * 2 ** self.idx
+        elif self.idx < 0:
+            step = 0.001 / 2 ** abs(self.idx)
+
         if event.key() == Qt.Key.Key_PageUp:
-            print(1)
+            if self.idx <= 5:
+                self.idx += 1
+
+                self.spn[0] *= 2
+                self.spn[1] *= 2
         if event.key() == Qt.Key.Key_PageDown:
-            print(2)
+            if self.idx >= -5:
+                self.idx -= 1
+
+                self.spn[0] /= 2
+                self.spn[1] /= 2
+        if event.key() == Qt.Key.Key_Up:
+            self.lt += step
+        if event.key() == Qt.Key.Key_Down:
+            self.lt -= step
+        if event.key() == Qt.Key.Key_Left:
+            self.ln -= step
+        if event.key() == Qt.Key.Key_Right:
+            self.ln += step
+
+        # if self.approach[self.idx] < 0:
+        #     self.spn[0] /= abs(self.approach[self.idx])
+        #     self.spn[1] /= abs(self.approach[self.idx])
+        # else:
+        #     self.spn[0] *= abs(self.approach[self.idx])
+        #     self.spn[1] *= abs(self.approach[self.idx])
+        # self.spn[0] *= 2 ** self.approach[self.idx]
+        # self.spn[1] *= 2 ** self.approach[self.idx]
+
+        self.spn[0] = round(self.spn[0], 6)
+        self.spn[1] = round(self.spn[1], 6)
+
+        self.getImage()
+        self.pixmap = QPixmap(self.map_file)
+        self.image.setPixmap(self.pixmap)
 
     def closeEvent(self, event):
         os.remove(self.map_file)
