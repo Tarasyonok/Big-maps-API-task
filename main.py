@@ -14,7 +14,7 @@ class MapsAPI(QWidget):
         self.ln = 37.530887
         self.lt = 55.703118
         self.spn = [0.002, 0.002]
-        self.approach = 0
+        self.idx = 0
 
         super().__init__()
         self.getImage()
@@ -46,21 +46,37 @@ class MapsAPI(QWidget):
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key.Key_PageUp:
-            if self.approach >= -4:
-                self.approach -= 1
+            if self.idx <= 5:
+                self.idx += 1
 
-                self.spn[0] /= 2 ** abs(self.approach)
-                self.spn[1] /= 2 ** abs(self.approach)
+                self.spn[0] *= 2
+                self.spn[1] *= 2
         if event.key() == Qt.Key.Key_PageDown:
-            if self.approach <= 4:
-                self.approach += 1
+            if self.idx >= -5:
+                self.idx -= 1
 
-                # self.spn[0] *= round(abs(self.approach), 6)
-                # self.spn[1] *= round(abs(self.approach), 6)
-                self.spn[0] *= 2 ** abs(self.approach)
-                self.spn[1] *= 2 ** abs(self.approach)
+                self.spn[0] /= 2
+                self.spn[1] /= 2
+        if event.key() == Qt.Key.Key_Up:
+            self.lt += 0.001
+        if event.key() == Qt.Key.Key_Down:
+            self.lt -= 0.001
+        if event.key() == Qt.Key.Key_Left:
+            self.ln -= 0.001
+        if event.key() == Qt.Key.Key_Right:
+            self.ln += 0.001
 
-        print(self.approach, self.spn)
+        # if self.approach[self.idx] < 0:
+        #     self.spn[0] /= abs(self.approach[self.idx])
+        #     self.spn[1] /= abs(self.approach[self.idx])
+        # else:
+        #     self.spn[0] *= abs(self.approach[self.idx])
+        #     self.spn[1] *= abs(self.approach[self.idx])
+        # self.spn[0] *= 2 ** self.approach[self.idx]
+        # self.spn[1] *= 2 ** self.approach[self.idx]
+
+        self.spn[0] = round(self.spn[0], 6)
+        self.spn[1] = round(self.spn[1], 6)
 
         self.getImage()
         self.pixmap = QPixmap(self.map_file)
