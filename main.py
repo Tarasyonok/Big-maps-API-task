@@ -5,7 +5,7 @@ import requests
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel
 
-SCREEN_SIZE = [600, 450]
+SCREEN_SIZE = [600, 600]
 
 
 class Example(QWidget):
@@ -24,7 +24,6 @@ class Example(QWidget):
             print("Http статус:", response.status_code, "(", response.reason, ")")
             sys.exit(1)
 
-        # Запишем полученное изображение в файл.
         self.map_file = "map.png"
         with open(self.map_file, "wb") as file:
             file.write(response.content)
@@ -33,7 +32,6 @@ class Example(QWidget):
         self.setGeometry(100, 100, *SCREEN_SIZE)
         self.setWindowTitle('Отображение карты')
 
-        ## Изображение
         self.pixmap = QPixmap(self.map_file)
         self.image = QLabel(self)
         self.image.move(0, 0)
@@ -41,7 +39,6 @@ class Example(QWidget):
         self.image.setPixmap(self.pixmap)
 
     def closeEvent(self, event):
-        """При закрытии формы подчищаем за собой"""
         os.remove(self.map_file)
 
 
